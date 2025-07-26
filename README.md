@@ -2,6 +2,8 @@
 
 A stunning, interactive 3D office environment created entirely with HTML and CSS - no JavaScript required! This project showcases modern office culture with diverse teams, realistic animations, and professional workplace scenarios.
 
+![3D Office Environment Preview](screenshot.png)
+
 ## ✨ Features
 
 ### 🎯 Four Department Layout
