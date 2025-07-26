@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Office Environment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .office-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1500px;
+        }
+
+        .office-building {
+            width: 90%;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .office-floor {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .department {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .department:hover {
+            transform: translateZ(30px) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .dept-header {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* Executive Office */
+        .executive {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+        }
+
+        .manager-workspace {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            position: relative;
+        }
+
+        /* Conference Table for Meeting */
+        .conference-table {
+            width: 90%;
+            height: 40px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+        }
+
+        .meeting-participants {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .meeting-person {
+            width: 18px;
+            height: 25px;
+            position: relative;
+        }
+
+        .meeting-head {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 auto 2px;
+        }
+
+        .meeting-body {
+            width: 15px;
+            height: 18px;
+            border-radius: 8px 8px 2px 2px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Manager at head of table */
+        .meeting-person:nth-child(1) .meeting-head {
+            background: #F5DEB3;
+        }
+
+        .meeting-person:nth-child(1) .meeting-body {
+            background: linear-gradient(145deg, #2C3E50, #34495E);
+        }
+
+        /* Meeting participants with diverse appearances */
+        .meeting-person:nth-child(2) .meeting-head {
+            background: #8D5524;
+        }
+
+        .meeting-person:nth-child(2) .meeting-body {
+            background: linear-gradient(145deg, #E74C3C, #C0392B);
+        }
+
+        .meeting-person:nth-child(3) .meeting-head {
+            background: #FFDBAC;
+        }
+
+        .meeting-person:nth-child(3) .meeting-body {
+            background: linear-gradient(145deg, #3498DB, #2980B9);
+        }
+
+        .meeting-person:nth-child(4) .meeting-head {
+            background: #3C2415;
+        }
+
+        .meeting-person:nth-child(4) .meeting-body {
+            background: linear-gradient(145deg, #9B59B6, #8E44AD);
+        }
+
+        /* Meeting gestures animation */
+        .meeting-person {
+            animation: meeting-gesture 6s infinite ease-in-out;
+        }
+
+        .meeting-person:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        .meeting-person:nth-child(3) {
+            animation-delay: 3s;
+        }
+
+        .meeting-person:nth-child(4) {
+            animation-delay: 4.5s;
+        }
+
+        @keyframes meeting-gesture {
+
+            0%,
+            85%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            10%,
+            75% {
+                transform: rotate(3deg);
+            }
+
+            40%,
+            50% {
+                transform: rotate(-2deg);
+            }
+        }
+
+        /* Presentation Screen */
+        .presentation-screen {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            width: 40px;
+            height: 25px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 3px;
+        }
+
+        .presentation-content {
+            width: 35px;
+            height: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            margin: 2px auto;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presentation-bars {
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            display: flex;
+            gap: 2px;
+        }
+
+        .pres-bar {
+            width: 4px;
+            background: #333;
+            border-radius: 1px;
+            animation: presentation-update 4s infinite ease-in-out;
+        }
+
+        .pres-bar:nth-child(1) {
+            height: 8px;
+            animation-delay: 0s;
+        }
+
+        .pres-bar:nth-child(2) {
+            height: 12px;
+            animation-delay: 1s;
+        }
+
+        .pres-bar:nth-child(3) {
+            height: 6px;
+            animation-delay: 2s;
+        }
+
+        .pres-bar:nth-child(4) {
+            height: 10px;
+            animation-delay: 3s;
+        }
+
+        @keyframes presentation-update {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1.2);
+            }
+        }
+
+        /* Meeting speech bubbles */
+        .meeting-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 3px 6px;
+            font-size: 8px;
+            color: #333;
+            font-weight: bold;
+            animation: meeting-speech 8s infinite ease-in-out;
+            opacity: 0;
+            max-width: 60px;
+            text-align: center;
+        }
+
+        .meeting-bubble:before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 10px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .bubble1 {
+            top: -35px;
+            left: 10px;
+            animation-delay: 0s;
+        }
+
+        .bubble2 {
+            top: -35px;
+            right: 10px;
+            animation-delay: 2s;
+        }
+
+        .bubble3 {
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 4s;
+        }
+
+        @keyframes meeting-speech {
+
+            0%,
+            85%,
+            100% {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            15%,
+            70% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Development Team */
+        .development {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.3), rgba(0, 86, 179, 0.2));
+        }
+
+        /* Marketing Team */
+        .marketing {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.3), rgba(176, 42, 55, 0.2));
+        }
+
+        /* HR Department */
+        .hr {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.3), rgba(32, 134, 55, 0.2));
+        }
+
+        .team-area {
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* HR Interview Setup */
+        .interview-area {
+            height: 100%;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .interview-table {
+            width: 70%;
+            height: 25px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .interview-participants {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .interviewer {
+            width: 16px;
+            height: 22px;
+            position: relative;
+        }
+
+        .candidate {
+            width: 16px;
+            height: 22px;
+            position: relative;
+        }
+
+        .interview-head {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 auto 2px;
+        }
+
+        .interview-body {
+            width: 13px;
+            height: 15px;
+            border-radius: 6px 6px 2px 2px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* HR Interviewer - professional appearance */
+        .interviewer .interview-head {
+            background: #8D5524;
+        }
+
+        .interviewer .interview-body {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+        }
+
+        /* Job Candidate - nervous but professional */
+        .candidate .interview-head {
+            background: #FFDBAC;
+        }
+
+        .candidate .interview-body {
+            background: linear-gradient(145deg, #6C757D, #495057);
+        }
+
+        /* Interview animations */
+        .interviewer {
+            animation: interviewer-nod 4s infinite ease-in-out;
+        }
+
+        .candidate {
+            animation: candidate-nervous 3s infinite ease-in-out;
+        }
+
+        @keyframes interviewer-nod {
+
+            0%,
+            90%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            45% {
+                transform: rotate(3deg);
+            }
+        }
+
+        @keyframes candidate-nervous {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-1px) rotate(-1deg);
+            }
+        }
+
+        /* Interview documents */
+        .resume-stack {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 20px;
+            height: 15px;
+        }
+
+        .resume-paper {
+            width: 18px;
+            height: 12px;
+            background: #FFFFFF;
+            border: 1px solid #DDD;
+            border-radius: 2px;
+            position: absolute;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .resume-paper:nth-child(1) {
+            top: 0;
+            left: 0;
+            z-index: 3;
+        }
+
+        .resume-paper:nth-child(2) {
+            top: 2px;
+            left: 2px;
+            z-index: 2;
+            background: #F8F9FA;
+        }
+
+        .resume-paper:nth-child(3) {
+            top: 4px;
+            left: 4px;
+            z-index: 1;
+            background: #F1F3F4;
+        }
+
+        .resume-lines {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 8px;
+        }
+
+        .resume-line {
+            width: 100%;
+            height: 1px;
+            background: #333;
+            margin: 1px 0;
+            border-radius: 0.5px;
+        }
+
+        .resume-line:nth-child(1) {
+            width: 80%;
+        }
+
+        .resume-line:nth-child(2) {
+            width: 90%;
+        }
+
+        .resume-line:nth-child(3) {
+            width: 70%;
+        }
+
+        /* Interview speech bubbles */
+        .interview-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #28a745;
+            border-radius: 8px;
+            padding: 3px 5px;
+            font-size: 7px;
+            color: #333;
+            font-weight: bold;
+            animation: interview-speech 10s infinite ease-in-out;
+            opacity: 0;
+            max-width: 50px;
+            text-align: center;
+        }
+
+        .interview-bubble:before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 8px;
+            width: 0;
+            height: 0;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 3px solid rgba(255, 255, 255, 0.95);
+        }
+
+        .int-bubble1 {
+            top: -30px;
+            left: 5px;
+            animation-delay: 0s;
+        }
+
+        .int-bubble2 {
+            top: -30px;
+            right: 5px;
+            animation-delay: 3s;
+        }
+
+        .int-bubble3 {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 6s;
+        }
+
+        @keyframes interview-speech {
+
+            0%,
+            85%,
+            100% {
+                opacity: 0;
+                transform: translateY(3px);
+            }
+
+            15%,
+            70% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .employee {
+            width: 35px;
+            height: 70px;
+            position: relative;
+            animation: work-motion 4s infinite ease-in-out;
+        }
+
+        .employee:nth-child(even) {
+            animation-delay: 2s;
+        }
+
+        .emp-head {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 3px;
+            position: relative;
+        }
+
+        .emp-body {
+            width: 25px;
+            height: 40px;
+            border-radius: 12px 12px 4px 4px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Diverse skin tones */
+        .employee:nth-child(1) .emp-head {
+            background: #F5DEB3;
+        }
+
+        .employee:nth-child(2) .emp-head {
+            background: #8D5524;
+        }
+
+        .employee:nth-child(3) .emp-head {
+            background: #FFDBAC;
+        }
+
+        .employee:nth-child(4) .emp-head {
+            background: #3C2415;
+        }
+
+        /* Department-specific clothing */
+        .development .emp-body {
+            background: linear-gradient(145deg, #007bff, #0056b3);
+        }
+
+        .marketing .emp-body {
+            background: linear-gradient(145deg, #dc3545, #b02a37);
+        }
+
+        .hr .emp-body {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+        }
+
+        /* Formal ties for marketing and HR */
+        .marketing .employee .emp-body:after,
+        .hr .employee .emp-body:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 15px;
+            background: repeating-linear-gradient(45deg, #FFD700, #FFD700 2px, #FF6B6B 2px, #FF6B6B 4px);
+            border-radius: 1px;
+        }
+
+        .team-laptop {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 20px;
+        }
+
+        .laptop-screen {
+            width: 25px;
+            height: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .screen-content {
+            width: 20px;
+            height: 10px;
+            margin: 2px auto;
+            border-radius: 1px;
+        }
+
+        .development .screen-content {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            animation: code-blink 1.5s infinite;
+        }
+
+        .marketing .screen-content {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            animation: design-pulse 2s infinite;
+        }
+
+        .hr .screen-content {
+            background: linear-gradient(135deg, #4ecdc4, #26a69a);
+            animation: data-flow 3s infinite;
+        }
+
+        @keyframes work-motion {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-2px) rotate(1deg);
+            }
+        }
+
+        @keyframes code-blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes design-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes data-flow {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Coffee Station */
+        .coffee-station {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 50px;
+        }
+
+        .coffee-machine {
+            width: 30px;
+            height: 35px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 5px;
+            position: relative;
+            border: 2px solid #654321;
+        }
+
+        .coffee-cup {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 20px;
+            background: linear-gradient(145deg, #FFFFFF, #F0F0F0);
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #DDD;
+        }
+
+        .coffee-steam {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .steam-line {
+            width: 2px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 1px;
+            margin: 0 1px;
+            display: inline-block;
+            animation: steam-rise 2s infinite ease-in-out;
+        }
+
+        .steam-line:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .steam-line:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes steam-rise {
+            0% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Office Plant */
+        .office-plant {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 60px;
+        }
+
+        .plant-pot {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+            border: 2px solid #654321;
+        }
+
+        .plant-leaf {
+            position: absolute;
+            width: 15px;
+            height: 25px;
+            background: #228B22;
+            border-radius: 50% 10% 50% 10%;
+            transform-origin: bottom center;
+        }
+
+        .leaf1 {
+            bottom: 18px;
+            left: 8px;
+            transform: rotate(-15deg);
+            animation: leaf-sway 3s infinite ease-in-out;
+        }
+
+        .leaf2 {
+            bottom: 20px;
+            left: 18px;
+            transform: rotate(10deg);
+            animation: leaf-sway 3s infinite ease-in-out reverse;
+        }
+
+        .leaf3 {
+            bottom: 25px;
+            left: 13px;
+            transform: rotate(-5deg);
+            animation: leaf-sway 4s infinite ease-in-out;
+            animation-delay: 1s;
+        }
+
+        @keyframes leaf-sway {
+
+            0%,
+            100% {
+                transform: rotate(var(--rotation, 0deg));
+            }
+
+            50% {
+                transform: rotate(calc(var(--rotation, 0deg) + 8deg));
+            }
+        }
+
+        /* Office Notifications System */
+        .notification-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 180px;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 8px;
+            padding: 8px;
+            color: white;
+            font-size: 9px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .notification-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #FFD700;
+            border-bottom: 1px solid #333;
+            padding-bottom: 3px;
+        }
+
+        .notification-item {
+            padding: 4px 6px;
+            margin: 2px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            border-left: 2px solid;
+            animation: notification-slide 12s infinite ease-in-out;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .notification-item:nth-child(2) {
+            border-left-color: #28a745;
+            animation-delay: 0s;
+        }
+
+        .notification-item:nth-child(3) {
+            border-left-color: #007bff;
+            animation-delay: 3s;
+        }
+
+        .notification-item:nth-child(4) {
+            border-left-color: #dc3545;
+            animation-delay: 6s;
+        }
+
+        .notification-item:nth-child(5) {
+            border-left-color: #ffc107;
+            animation-delay: 9s;
+        }
+
+        @keyframes notification-slide {
+
+            0%,
+            85%,
+            100% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            15%,
+            70% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Water Cooler Gossip Area */
+        .water-cooler-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 100px;
+            z-index: 5;
+        }
+
+        .water-cooler {
+            width: 35px;
+            height: 50px;
+            background: linear-gradient(145deg, #E8E8E8, #C0C0C0);
+            border-radius: 6px;
+            position: relative;
+            border: 2px solid #A0A0A0;
+            margin: 0 auto;
+        }
+
+        .water-tank {
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #4A90E2, #2E5C8A);
+            border-radius: 50%;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #1E3A5F;
+        }
+
+        .water-bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: bubble-float 3s infinite ease-in-out;
+        }
+
+        .bubble-1 {
+            width: 3px;
+            height: 3px;
+            left: 10px;
+            bottom: 8px;
+            animation-delay: 0s;
+        }
+
+        .bubble-2 {
+            width: 4px;
+            height: 4px;
+            left: 15px;
+            bottom: 12px;
+            animation-delay: 1s;
+        }
+
+        .bubble-3 {
+            width: 2px;
+            height: 2px;
+            left: 12px;
+            bottom: 4px;
+            animation-delay: 2s;
+        }
+
+        @keyframes bubble-float {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+        }
+
+        /* Gossip People near Water Cooler */
+        .gossip-group {
+            position: absolute;
+            bottom: -15px;
+            left: -25px;
+            width: 100px;
+            height: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        .gossip-person {
+            width: 18px;
+            height: 30px;
+            position: relative;
+        }
+
+        .gossip-head {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 auto 2px;
+        }
+
+        .gossip-body {
+            width: 14px;
+            height: 18px;
+            border-radius: 7px 7px 2px 2px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Diverse gossip group */
+        .gossip-person:nth-child(1) .gossip-head {
+            background: #F5DEB3;
+        }
+
+        .gossip-person:nth-child(1) .gossip-body {
+            background: linear-gradient(145deg, #FF6B6B, #FF5252);
+        }
+
+        .gossip-person:nth-child(2) .gossip-head {
+            background: #8D5524;
+        }
+
+        .gossip-person:nth-child(2) .gossip-body {
+            background: linear-gradient(145deg, #4ECDC4, #26A69A);
+        }
+
+        .gossip-person:nth-child(3) .gossip-head {
+            background: #3C2415;
+        }
+
+        .gossip-person:nth-child(3) .gossip-body {
+            background: linear-gradient(145deg, #9B59B6, #8E44AD);
+        }
+
+        .gossip-person {
+            animation: gossip-lean 4s infinite ease-in-out;
+        }
+
+        .gossip-person:nth-child(2) {
+            animation-delay: 1.3s;
+        }
+
+        .gossip-person:nth-child(3) {
+            animation-delay: 2.6s;
+        }
+
+        @keyframes gossip-lean {
+
+            0%,
+            80%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            40% {
+                transform: rotate(4deg) translateX(1px);
+            }
+        }
+
+        /* Gossip Speech Bubbles */
+        .gossip-bubble {
+            position: absolute;
+            background: #FFB6C1;
+            border: 1px solid #FF69B4;
+            border-radius: 10px;
+            padding: 3px 6px;
+            font-size: 7px;
+            color: #8B008B;
+            font-weight: bold;
+            animation: gossip-chat 10s infinite ease-in-out;
+            opacity: 0;
+            max-width: 70px;
+            text-align: center;
+        }
+
+        .gossip-bubble:before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 8px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #FFB6C1;
+        }
+
+        .gossip-bubble-1 {
+            top: -30px;
+            left: -8px;
+            animation-delay: 0s;
+        }
+
+        .gossip-bubble-2 {
+            top: -30px;
+            left: 25px;
+            animation-delay: 3.3s;
+        }
+
+        .gossip-bubble-3 {
+            top: -30px;
+            right: -8px;
+            animation-delay: 6.6s;
+        }
+
+        @keyframes gossip-chat {
+
+            0%,
+            85%,
+            100% {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            15%,
+            70% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Office Clock */
+        .office-clock {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border: 2px solid #333;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .clock-face {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 50%;
+        }
+
+        .clock-hand {
+            position: absolute;
+            background: #333;
+            transform-origin: bottom center;
+            border-radius: 1px;
+        }
+
+        .hour-hand {
+            width: 2px;
+            height: 12px;
+            top: 8px;
+            left: 50%;
+            margin-left: -1px;
+            animation: hour-rotate 43200s infinite linear;
+        }
+
+        .minute-hand {
+            width: 1px;
+            height: 16px;
+            top: 4px;
+            left: 50%;
+            margin-left: -0.5px;
+            animation: minute-rotate 3600s infinite linear;
+        }
+
+        @keyframes hour-rotate {
+            0% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(450deg);
+            }
+        }
+
+        @keyframes minute-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #333;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .office-building {
+                width: 95%;
+                height: 90vh;
+            }
+
+            .office-floor {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, 1fr);
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .department {
+                min-height: 150px;
+            }
+
+            .employee {
+                width: 30px;
+                height: 60px;
+            }
+
+            .emp-body {
+                width: 20px;
+                height: 35px;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="office-container">
+        <div class="office-building" role="img" aria-label="Modern office building with four departments">
+            <div class="office-floor">
+
+                <!-- Executive Department -->
+                <div class="department executive">
+                    <div class="dept-header">EXECUTIVE MEETING</div>
+                    <div class="manager-workspace">
+                        <!-- Presentation Screen -->
+                        <div class="presentation-screen">
+                            <div class="presentation-content">
+                                <div class="presentation-bars">
+                                    <div class="pres-bar"></div>
+                                    <div class="pres-bar"></div>
+                                    <div class="pres-bar"></div>
+                                    <div class="pres-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conference Table with Meeting -->
+                        <div class="conference-table">
+                            <div class="meeting-participants">
+                                <div class="meeting-person">
+                                    <div class="meeting-head"></div>
+                                    <div class="meeting-body"></div>
+                                </div>
+                                <div class="meeting-person">
+                                    <div class="meeting-head"></div>
+                                    <div class="meeting-body"></div>
+                                </div>
+                                <div class="meeting-person">
+                                    <div class="meeting-head"></div>
+                                    <div class="meeting-body"></div>
+                                </div>
+                                <div class="meeting-person">
+                                    <div class="meeting-head"></div>
+                                    <div class="meeting-body"></div>
+                                </div>
+                            </div>
+
+                            <!-- Meeting Speech Bubbles -->
+                            <div class="meeting-bubble bubble1">
+                                "Q4 results look promising"
+                            </div>
+                            <div class="meeting-bubble bubble2">
+                                "Let's discuss the new strategy"
+                            </div>
+                            <div class="meeting-bubble bubble3">
+                                "Great teamwork everyone!"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development Department -->
+                <div class="department development">
+                    <div class="dept-header">DEVELOPMENT TEAM</div>
+                    <div class="team-area">
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="team-laptop">
+                            <div class="laptop-screen">
+                                <div class="screen-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketing Department -->
+                <div class="department marketing">
+                    <div class="dept-header">MARKETING TEAM</div>
+                    <div class="team-area">
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="employee">
+                            <div class="emp-head"></div>
+                            <div class="emp-body"></div>
+                        </div>
+                        <div class="team-laptop">
+                            <div class="laptop-screen">
+                                <div class="screen-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HR Department -->
+                <div class="department hr">
+                    <div class="dept-header">HR INTERVIEW</div>
+                    <div class="interview-area">
+                        <!-- Resume Stack -->
+                        <div class="resume-stack">
+                            <div class="resume-paper">
+                                <div class="resume-lines">
+                                    <div class="resume-line"></div>
+                                    <div class="resume-line"></div>
+                                    <div class="resume-line"></div>
+                                </div>
+                            </div>
+                            <div class="resume-paper"></div>
+                            <div class="resume-paper"></div>
+                        </div>
+
+                        <!-- Interview Table -->
+                        <div class="interview-table">
+                            <div class="interview-participants">
+                                <div class="interviewer">
+                                    <div class="interview-head"></div>
+                                    <div class="interview-body"></div>
+                                </div>
+                                <div class="candidate">
+                                    <div class="interview-head"></div>
+                                    <div class="interview-body"></div>
+                                </div>
+                            </div>
+
+                            <!-- Interview Speech Bubbles -->
+                            <div class="interview-bubble int-bubble1">
+                                "Tell me about yourself"
+                            </div>
+                            <div class="interview-bubble int-bubble2">
+                                "I'm passionate about this role"
+                            </div>
+                            <div class="interview-bubble int-bubble3">
+                                "Welcome to the team!"
+                            </div>
+                        </div>
+
+                        <!-- Team Laptop for HR -->
+                        <div class="team-laptop">
+                            <div class="laptop-screen">
+                                <div class="screen-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Office Amenities -->
+            <div class="coffee-station">
+                <div class="coffee-machine">
+                    <div class="coffee-cup">
+                        <div class="coffee-steam">
+                            <div class="steam-line"></div>
+                            <div class="steam-line"></div>
+                            <div class="steam-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="office-plant">
+                <div class="plant-leaf leaf1" style="--rotation: -15deg;"></div>
+                <div class="plant-leaf leaf2" style="--rotation: 10deg;"></div>
+                <div class="plant-leaf leaf3" style="--rotation: -5deg;"></div>
+                <div class="plant-pot"></div>
+            </div>
+
+            <!-- Office Notifications Panel -->
+            <div class="notification-panel">
+                <div class="notification-header">OFFICE UPDATES</div>
+                <div class="notification-item">✅ New hire orientation - 2:00 PM</div>
+                <div class="notification-item">💻 Dev team standup - 9:30 AM</div>
+                <div class="notification-item">🎉 Marketing campaign launch!</div>
+                <div class="notification-item">📊 Q4 review meeting scheduled</div>
+            </div>
+
+            <!-- Water Cooler Gossip Area -->
+            <div class="water-cooler-area">
+                <div class="water-cooler">
+                    <div class="water-tank">
+                        <div class="water-bubble bubble-1"></div>
+                        <div class="water-bubble bubble-2"></div>
+                        <div class="water-bubble bubble-3"></div>
+                    </div>
+                </div>
+
+                <div class="gossip-group">
+                    <div class="gossip-person">
+                        <div class="gossip-head"></div>
+                        <div class="gossip-body"></div>
+                    </div>
+                    <div class="gossip-person">
+                        <div class="gossip-head"></div>
+                        <div class="gossip-body"></div>
+                    </div>
+                    <div class="gossip-person">
+                        <div class="gossip-head"></div>
+                        <div class="gossip-body"></div>
+                    </div>
+                </div>
+
+                <!-- Gossip Speech Bubbles -->
+                <div class="gossip-bubble gossip-bubble-1">
+                    "Did you hear about the promotion?"
+                </div>
+                <div class="gossip-bubble gossip-bubble-2">
+                    "The new project looks exciting!"
+                </div>
+                <div class="gossip-bubble gossip-bubble-3">
+                    "Coffee break in 10 minutes?"
+                </div>
+            </div>
+
+            <!-- Office Wall Clock -->
+            <div class="office-clock">
+                <div class="clock-face">
+                    <div class="clock-hand hour-hand"></div>
+                    <div class="clock-hand minute-hand"></div>
+                    <div class="clock-center"></div>
+                </div>
+            </div>
+
+            <span class="sr-only">Modern office environment with executive office, development team, marketing team, and
+                HR department, featuring diverse employees and office amenities</span>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
